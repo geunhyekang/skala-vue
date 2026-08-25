@@ -2,9 +2,11 @@
 import { useWeatherViewModel } from '../viewmodels/useWeatherViewModel'
 
 const {
-  searchTerm,
-  selectedMessage,
-  filteredList,
+  searchQuery,
+  selectedCityInfo,
+  filteredWeatherList,
+  clickCount,
+  averageTemp,
   updateSearch,
   selectCity,
   showDetail,
@@ -15,7 +17,7 @@ const {
 
 <template>
   <div class="weather-mockup">
-    <h2>🌤 날씨 Mockup</h2>
+    <h2>🌤 날씨 Composition</h2>
 
     <div class="search-box">
       <label for="citySearch">🔍 도시 검색</label>
@@ -23,17 +25,19 @@ const {
         id="citySearch"
         type="text"
         placeholder="검색할 도시 이름 입력"
-        :value="searchTerm"
+        :value="searchQuery"
         @input="updateSearch($event.target.value)"
       />
-      <p>검색 중인 도시: {{ searchTerm || '없음' }}</p>
+      <p>검색 중인 도시: {{ searchQuery || '없음' }}</p>
     </div>
 
-    <p class="selected-message">{{ selectedMessage }}</p>
+    <p class="selected-message">{{ selectedCityInfo }}</p>
+    <p class="stat-line">클릭 횟수: {{ clickCount }}회 · 평균 기온: {{ averageTemp }}°C</p>
 
+    <!-- 4. 검색 결과 표시: filteredWeatherList 하나로 3가지 케이스 모두 처리 -->
     <div class="card-list">
       <div
-        v-for="city in filteredList"
+        v-for="city in filteredWeatherList"
         :key="city.id"
         class="weather-card"
         @click="selectCity(city.name)"
@@ -51,7 +55,9 @@ const {
         <button @click.stop="showDetail(city.name, city.status)">상세보기</button>
       </div>
 
-      <p v-if="filteredList.length === 0" class="empty">검색 결과가 없습니다.</p>
+      <p v-if="filteredWeatherList.length === 0" class="empty">
+        검색 결과와 일치하는 도시가 없습니다.
+      </p>
     </div>
   </div>
 </template>
@@ -79,6 +85,12 @@ const {
   padding: 8px;
   border-radius: 6px;
   text-align: center;
+}
+.stat-line {
+  text-align: center;
+  color: #555;
+  font-size: 0.9em;
+  margin: 4px 0 12px;
 }
 .card-list {
   display: flex;
