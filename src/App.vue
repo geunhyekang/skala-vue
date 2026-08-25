@@ -19,7 +19,6 @@ import VueCloak from './components/practices/basic/VueCloak.vue'
 import VueOnce from './components/practices/basic/VueOnce.vue'
 import VueMemo from './components/practices/basic/VueMemo.vue'
 
-/*
 // 3. Vue Event Handling
 import EventBasic from './components/practices/basic/EventBasic.vue'
 import EventObject from './components/practices/basic/EventObject.vue'
@@ -32,7 +31,6 @@ import ModelModifier from './components/practices/basic/ModelModifier.vue'
 
 // 5. Vue Style Handling
 import StyleScoped from './components/practices/basic/StyleScoped.vue'
-*/
 </script>
 
 <template>
@@ -59,7 +57,6 @@ import StyleScoped from './components/practices/basic/StyleScoped.vue'
     <VueMemo />
     <h1>3. Vue Event Handling</h1>
     <hr />
-    <!--
     <EventBasic />
     <EventObject />
     <EventModifier />
@@ -71,11 +68,10 @@ import StyleScoped from './components/practices/basic/StyleScoped.vue'
     <h1>5. Vue Style Handling</h1>
     <hr />
     <StyleScoped />
-  --></div>
+  </div>
 </template>
 
-<!--<style>
+<style>
 /* ⚠️ 외부 스타일 파일(예: 버튼 디자인 뭉치)을 이 방 안으로 쏙 가리켜 가져옵니다 */
 @import '@/assets/practice.css';
 </style>
--->
