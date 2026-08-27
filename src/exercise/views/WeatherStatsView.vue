@@ -2,6 +2,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { fetchWeatherList } from '../services/weatherService'
 import { isHot } from '../models/weatherRules'
+import Card from 'primevue/card'
+import ProgressSpinner from 'primevue/progressspinner'
 
 const weatherList = ref([])
 const isLoading = ref(true)
@@ -21,23 +23,18 @@ const averageTemp = computed(() => {
 </script>
 
 <template>
-  <v-card variant="outlined">
-    <v-card-title>📊 전체 도시 날씨 통계</v-card-title>
-    <div v-if="isLoading" class="d-flex justify-center my-6">
-      <v-progress-circular indeterminate color="primary" />
-    </div>
-    <v-list v-else>
-      <v-list-item>등록된 도시 수: {{ weatherList.length }}개</v-list-item>
-      <v-list-item>평균 기온: {{ averageTemp }}°C</v-list-item>
-      <v-list-item>🔥 더움(25도 이상): {{ hotCount }}개</v-list-item>
-      <v-list-item>❄ 선선함(25도 미만): {{ coolCount }}개</v-list-item>
-    </v-list>
-  </v-card>
+  <Card>
+    <template #title>📊 전체 도시 날씨 통계</template>
+    <template #content>
+      <div v-if="isLoading" class="flex justify-content-center my-6">
+        <ProgressSpinner />
+      </div>
+      <ul v-else>
+        <li>등록된 도시 수: {{ weatherList.length }}개</li>
+        <li>평균 기온: {{ averageTemp }}°C</li>
+        <li>🔥 더움(25도 이상): {{ hotCount }}개</li>
+        <li>❄ 선선함(25도 미만): {{ coolCount }}개</li>
+      </ul>
+    </template>
+  </Card>
 </template>
-
-<style scoped>
-.stats-view ul {
-  padding-left: 20px;
-  line-height: 1.8;
-}
-</style>

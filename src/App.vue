@@ -1,22 +1,36 @@
 <script setup>
+import Button from 'primevue/button'
+import Toolbar from 'primevue/toolbar'
 import UnitToggler from './exercise/components/UnitToggler.vue'
 </script>
 
 <template>
-  <v-app>
-    <v-app-bar color="primary" density="comfortable">
-      <v-app-bar-title>🌤 날씨 대시보드</v-app-bar-title>
-      <v-btn to="/" variant="text">대시보드</v-btn>
-      <v-btn to="/about" variant="text">소개</v-btn>
-      <v-btn to="/stats" variant="text">통계</v-btn>
-      <v-spacer />
-      <UnitToggler />
-    </v-app-bar>
+  <div id="app-shell">
+    <Toolbar>
+      <template #start>
+        <span class="text-xl font-bold mr-3">🌤 날씨 대시보드</span>
+        <Button as="router-link" to="/" label="대시보드" text />
+        <Button as="router-link" to="/about" label="소개" text />
+        <Button as="router-link" to="/stats" label="통계" text />
+      </template>
+      <template #end>
+        <UnitToggler />
+      </template>
+    </Toolbar>
 
-    <v-main>
-      <v-container style="max-width: 480px">
-        <RouterView />
-      </v-container>
-    </v-main>
-  </v-app>
+    <main class="main-content">
+      <RouterView />
+    </main>
+  </div>
 </template>
+
+<style scoped>
+#app-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+.main-content {
+  padding: 16px 12px;
+}
+</style>

@@ -1,14 +1,16 @@
 <script setup>
+import Card from 'primevue/card'
+
 defineProps({
   title: { type: String, required: true },
 })
 </script>
 
 <template>
-  <v-card class="mb-4" variant="outlined">
-    <v-card-title>{{ title }}</v-card-title>
-    <v-card-text>
+  <Card class="mb-4">
+    <template #title>{{ title }}</template>
+    <template #content>
       <slot />
-    </v-card-text>
-  </v-card>
+    </template>
+  </Card>
 </template>

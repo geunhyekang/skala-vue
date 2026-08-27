@@ -1,4 +1,6 @@
 <script setup>
+import Message from 'primevue/message'
+
 defineProps({
   message: { type: String, required: true },
   clickCount: { type: Number, default: 0 },
@@ -7,8 +9,8 @@ defineProps({
 </script>
 
 <template>
-  <v-alert type="success" variant="tonal" class="mb-4">
+  <Message severity="success" :closable="false" class="mb-4">
     <div>{{ message }}</div>
-    <div class="text-caption">클릭 횟수: {{ clickCount }}회 · 평균 기온: {{ averageTemp }}°C</div>
-  </v-alert>
+    <div class="text-sm">클릭 횟수: {{ clickCount }}회 · 평균 기온: {{ averageTemp }}°C</div>
+  </Message>
 </template>

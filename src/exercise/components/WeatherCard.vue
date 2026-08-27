@@ -1,5 +1,8 @@
 <script setup>
 import { computed } from 'vue'
+import Card from 'primevue/card'
+import Tag from 'primevue/tag'
+import Button from 'primevue/button'
 import { isHot, isHumid } from '../models/weatherRules'
 import { useConfigStore } from '../../stores/configStore'
 
@@ -33,28 +36,27 @@ function handleToggleFavorite() {
 </script>
 
 <template>
-  <v-card class="mb-3" variant="tonal" @click="handleSelect">
-    <v-card-title class="d-flex justify-space-between">
-      <span>{{ city.name }}</span>
-      <span>{{ displayTemp }}{{ configStore.unitSymbol }}</span>
-    </v-card-title>
-
-    <v-card-text>
-      <v-chip v-if="isHot(city)" color="red" size="small" class="mr-2">🔥 더움 (25도 이상)</v-chip>
-      <v-chip v-else color="blue" size="small" class="mr-2">❄ 선선함 (25도 미만)</v-chip>
-
-      <v-chip v-if="isHumid(city)" color="cyan" size="small">
-        💧 습도 높음 ({{ city.humidity }}%)
-      </v-chip>
-    </v-card-text>
-
-    <v-card-actions>
-      <v-btn variant="tonal" color="amber" size="small" @click.stop="handleToggleFavorite">
-        {{ configStore.isFavorite(city.id) ? '★ 즐겨찾기' : '☆ 즐겨찾기' }}
-      </v-btn>
-      <v-btn variant="elevated" color="primary" size="small" @click.stop="handleDetail">
-        상세보기
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+  <Card class="mb-3 cursor-pointer" @click="handleSelect">
+    <template #title>
+      <div class="flex justify-content-between">
+        <span>{{ city.name }}</span>
+        <span>{{ displayTemp }}{{ configStore.unitSymbol }}</span>
+      </div>
+    </template>
+    <template #content>
+      <Tag v-if="isHot(city)" severity="danger" value="🔥 더움 (25도 이상)" class="mr-2" />
+      <Tag v-else severity="info" value="❄ 선선함 (25도 미만)" class="mr-2" />
+      <Tag v-if="isHumid(city)" severity="secondary" :value="`💧 습도 높음 (${city.humidity}%)`" />
+    </template>
+    <template #footer>
+      <Button
+        :label="configStore.isFavorite(city.id) ? '★ 즐겨찾기' : '☆ 즐겨찾기'"
+        severity="warn"
+        size="small"
+        class="mr-2"
+        @click.stop="handleToggleFavorite"
+      />
+      <Button label="상세보기" size="small" @click.stop="handleDetail" />
+    </template>
+  </Card>
 </template>

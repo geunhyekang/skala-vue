@@ -8,6 +8,9 @@ import SearchBar from '../components/SearchBar.vue'
 import WeatherCard from '../components/WeatherCard.vue'
 import StatusBanner from '../components/StatusBanner.vue'
 
+import ProgressSpinner from 'primevue/progressspinner'
+import Message from 'primevue/message'
+
 const router = useRouter()
 
 const weatherList = ref([])
@@ -69,10 +72,12 @@ function handleClickDetail({ id }) {
       :average-temp="averageTemp"
     />
 
-    <div v-if="isLoading" class="d-flex justify-center my-6">
-      <v-progress-circular indeterminate color="primary" />
+    <div v-if="isLoading" class="flex justify-content-center my-6">
+      <ProgressSpinner />
     </div>
-    <v-alert v-else-if="loadError" type="error" class="mb-4">{{ loadError }}</v-alert>
+    <Message v-else-if="loadError" severity="error" :closable="false" class="mb-4">{{
+      loadError
+    }}</Message>
 
     <template v-else>
       <BaseDashboardCard title="🔍 도시 검색 (한글 즉시 동기화)">
@@ -87,9 +92,9 @@ function handleClickDetail({ id }) {
           @select-card="handleSelectCard"
           @click-detail="handleClickDetail"
         />
-        <v-alert v-if="filteredWeatherList.length === 0" type="info" variant="tonal">
+        <Message v-if="filteredWeatherList.length === 0" severity="info" :closable="false">
           검색 결과와 일치하는 도시가 없습니다.
-        </v-alert>
+        </Message>
       </BaseDashboardCard>
     </template>
   </div>
