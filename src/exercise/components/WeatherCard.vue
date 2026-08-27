@@ -12,7 +12,7 @@ function handleSelect() {
 }
 
 function handleDetail() {
-  emit('click-detail', { name: props.city.name, status: props.city.status })
+  emit('click-detail', { id: props.city.id, name: props.city.name, status: props.city.status })
 }
 </script>
 
@@ -28,7 +28,6 @@ function handleDetail() {
 
     <span v-if="isHumid(city)" class="badge humid"> 💧 습도 높음 ({{ city.humidity }}%) </span>
 
-    <!-- 같은 컴포넌트 안에서 카드 클릭과 버튼 클릭이 겹치므로 .stop은 여기서도 필요 -->
     <button @click.stop="handleDetail">상세보기</button>
   </div>
 </template>
