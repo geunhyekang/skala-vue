@@ -105,7 +105,7 @@ function goBackToDashboard() {
           </div>
         </div>
         <div v-if="airQuality" class="stat-tile">
-          <div class="stat-label">대기질 (기타 외부 API)</div>
+          <div class="stat-label">대기질</div>
           <div class="stat-value" style="font-size: 1.3rem">
             {{ classifyAirQuality(airQuality.usAqi) }}
           </div>

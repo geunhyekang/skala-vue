@@ -13,7 +13,7 @@ Vue 3 기반으로 진행한 "날씨 대시보드" 실습 프로젝트 결과물
 | HTTP 통신     | Axios                                                                             |
 | UI 라이브러리 | PrimeVue 4 + PrimeIcons + PrimeFlex                                               |
 | 폰트          | Pretendard                                                                        |
-| 외부 API      | OpenWeatherMap (Current Weather, 5 Day / 3 Hour Forecast), open.er-api.com (환율) |
+| 외부 API      | OpenWeatherMap (Current Weather, 5 Day / 3 Hour Forecast), Open-Meteo Air Quality API (대기질) |
 
 ## 폴더 구조
 
@@ -32,7 +32,7 @@ src/
     ├── services/
     │   ├── weatherApi.js       # Axios 인스턴스 + OpenWeatherMap 원본 API 호출
     │   ├── weatherService.js   # 화면에서 쓰는 형태로 가공된 날씨 조회 함수
-    │   └── exchangeRateApi.js  # 기타 외부 API(환율) 연동
+    │   └── airQualityApi.js    # 기타 외부 API(대기질) 연동
     ├── components/
     │   ├── BaseDashboardCard.vue
     │   ├── SearchBar.vue
@@ -85,14 +85,7 @@ src/
 
 - Mock 데이터를 제거하고 OpenWeatherMap Current Weather API로 실시간 날씨 데이터 조회
 - 5 Day / 3 Hour Forecast API를 추가로 연동해 상세 페이지에 예보 정보 표시
-- 환율 API(open.er-api.com)를 붙여 OpenWeatherMap 외의 외부 API 연동 사례도 구현
-- API 키는 `.env`의 `VITE_OPENWEATHER_API_KEY`로 분리, 저장소에는 커밋되지 않도록 처리
-
-### 7. Weather UI Library (PrimeVue)
-
-- Mock 데이터를 제거하고 OpenWeatherMap Current Weather API로 실시간 날씨 데이터 조회
-- 5 Day / 3 Hour Forecast API를 추가로 연동해 상세 페이지에 예보 정보 표시
-- 환율 API(open.er-api.com)를 붙여 OpenWeatherMap 외의 외부 API 연동 사례도 구현
+- Open-Meteo Air Quality API(대기질)를 붙여 OpenWeatherMap 외의 외부 API 연동 사례도 구현 — 상세 페이지에서 도시 좌표(위도/경도)를 기반으로 PM10·PM2.5·대기질 등급을 함께 표시
 - API 키는 `.env`의 `VITE_OPENWEATHER_API_KEY`로 분리, 저장소에는 커밋되지 않도록 처리
 
 ### 7. Weather UI Library (PrimeVue)
@@ -101,13 +94,20 @@ src/
 - `definePreset`으로 커스텀 테마를 만들고, 전역 CSS로 카드/버튼/태그/그리드 스타일을 다듬어 자체 디자인 시스템 구축
 - Toss / PickCare 등 레퍼런스를 참고해 히어로 배너, 카드 그리드, 통계 타일 등 UI를 여러 차례 반복 개선
 
+### 8. Weather Deployment (Vite Build & Deployment)
+
+- `npm run lint`(ESLint + oxlint)로 에러 없는 상태를 확인하고, API 키는 `.env` + `.gitignore`로 저장소에 노출되지 않도록 처리
+- `npm run build`로 정적 파일을 생성하고 GitHub Pages(`gh-pages` 브랜치)에 호스팅
+- GitHub Pages는 서버 리다이렉트 설정이 불가능한 정적 호스팅이라, 라우터를 `createWebHistory` → `createWebHashHistory`로 전환해 새로고침 시 404가 나지 않도록 처리
+- `vite.config.js`에 `base: '/skala-vue/'`를 설정해 저장소 서브경로에서도 에셋 경로가 올바르게 해석되도록 처리
+
 ## 주요 기능
 
 - **실시간 날씨 조회**: 등록된 도시들의 현재 기온·날씨 상태·습도를 실시간으로 표시
 - **도시 검색 및 추가**: 등록된 도시는 이름으로 즉시 필터링, 등록되지 않은 도시는 영문명으로 검색해 목록에 추가 가능
 - **즐겨찾기**: 자주 보는 지역을 즐겨찾기하면 상단에 고정된 섹션에서 모아보기 가능 (비어있어도 섹션 위치는 고정)
 - **온도 단위 변환**: 섭씨/화씨 토글 시 대시보드·즐겨찾기·상세 페이지 전체에 반영
-- **상세 정보 페이지**: 관측 지점, 체감온도, 최고/최저기온, 대기 습도, 풍속, 일출·일몰 시각, 3시간 단위 예보 제공
+- **상세 정보 페이지**: 관측 지점, 체감온도, 최고/최저기온, 대기 습도, 풍속, 일출·일몰 시각, 대기질(PM10·PM2.5), 3시간 단위 예보 제공
 - **통계 페이지**: 등록된 전체 도시의 평균 기온, 더움/선선함 도시 수 집계
 - **404 페이지**: 존재하지 않는 경로 접근 시 안내 화면과 메인 이동 버튼 제공
 
@@ -127,8 +127,17 @@ VITE_OPENWEATHER_API_KEY=발급받은_키
 npm run dev
 ```
 
+## 배포
+
+```bash
+npm run deploy
+```
+
+`vite build` 후 `dist/`를 `gh-pages` 브랜치로 푸시합니다. GitHub 저장소 **Settings → Pages**에서 Source를 `gh-pages` 브랜치로 지정하면 `https://<username>.github.io/skala-vue/`에서 확인할 수 있습니다.
+
 ## 트러블슈팅 / 배운 점
 
 - 폴더를 여러 번 재구성하는 과정에서 상대 경로(`../`) 계산이 꼬여 `Failed to resolve import` 에러를 여러 차례 겪음 → 폴더 depth를 먼저 확정하고 import 경로를 일괄 정리하는 방식으로 해결
 - `primevue`를 버전 고정 없이 설치했다가 최신 메이저 버전(v5)에서 예기치 못한 라이선스 워터마크가 발생 → 검증된 v4로 버전을 고정해 해결
 - Mock 데이터에서 실제 API로 전환할 때, 서비스 레이어 함수들을 처음부터 `async`로 설계해둔 덕분에 View 컴포넌트 코드를 거의 수정하지 않고 교체할 수 있었음
+- `gh-pages` 패키지의 기본 파일 정리 로직이 기존 배포 파일을 완전히 지우지 못해, 배포할 때마다 예전 잔여 파일이 계속 남는 문제를 겪음 → `dist/` 내용으로 orphan 브랜치를 새로 만들어 강제로 덮어쓰는 방식으로 해결
