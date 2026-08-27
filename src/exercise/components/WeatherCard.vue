@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { isHot, isHumid } from '../models/weatherRules'
+import { isHot, isHumid, convertTemp } from '../models/weatherRules'
 import { useConfigStore } from '../../stores/configStore'
 
 const props = defineProps({
@@ -10,13 +10,7 @@ const props = defineProps({
 const emit = defineEmits(['click-detail'])
 const configStore = useConfigStore()
 
-const displayTemp = computed(() => {
-  const rawTemp = props.city.temp
-  if (configStore.unit === 'fahrenheit') {
-    return Math.round((rawTemp * 9) / 5 + 32)
-  }
-  return rawTemp
-})
+const displayTemp = computed(() => convertTemp(props.city.temp, configStore.unit))
 
 function handleDetail() {
   emit('click-detail', { id: props.city.id, name: props.city.name, status: props.city.status })

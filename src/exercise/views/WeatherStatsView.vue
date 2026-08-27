@@ -2,13 +2,15 @@
 import { ref, computed, onMounted } from 'vue'
 import { fetchWeatherList } from '../services/weatherService'
 import { isHot } from '../models/weatherRules'
+import { useCityStore } from '../../stores/cityStore'
 import ProgressSpinner from 'primevue/progressspinner'
 
+const cityStore = useCityStore()
 const weatherList = ref([])
 const isLoading = ref(true)
 
 onMounted(async () => {
-  weatherList.value = await fetchWeatherList()
+  weatherList.value = await fetchWeatherList(cityStore.cities)
   isLoading.value = false
 })
 

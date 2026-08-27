@@ -2,7 +2,9 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchWeatherDetail, fetchWeatherForecast } from '../services/weatherService'
+import { convertTemp } from '../models/weatherRules'
 import { useConfigStore } from '../../stores/configStore'
+import { useCityStore } from '../../stores/cityStore'
 import ProgressSpinner from 'primevue/progressspinner'
 
 const props = defineProps({
@@ -11,15 +13,21 @@ const props = defineProps({
 
 const router = useRouter()
 const configStore = useConfigStore()
+const cityStore = useCityStore()
 const detail = ref(null)
 const forecast = ref([])
 const isLoading = ref(true)
 const loadError = ref(null)
 
 onMounted(async () => {
+  const city = cityStore.findById(props.cityId)
+  if (!city) {
+    isLoading.value = false
+    return
+  }
   try {
-    detail.value = await fetchWeatherDetail(props.cityId)
-    forecast.value = await fetchWeatherForecast(props.cityId)
+    detail.value = await fetchWeatherDetail(city)
+    forecast.value = await fetchWeatherForecast(city)
   } catch (err) {
     loadError.value = '날씨 정보를 불러오지 못했습니다.'
   } finally {
@@ -27,14 +35,18 @@ onMounted(async () => {
   }
 })
 
-const displayTemp = computed(() => {
-  if (!detail.value) return null
-  const rawTemp = detail.value.temp
-  if (configStore.unit === 'fahrenheit') {
-    return Math.round((rawTemp * 9) / 5 + 32)
-  }
-  return rawTemp
-})
+const displayTemp = computed(() =>
+  detail.value ? convertTemp(detail.value.temp, configStore.unit) : null,
+)
+const displayFeelsLike = computed(() =>
+  detail.value ? convertTemp(detail.value.feelsLike, configStore.unit) : null,
+)
+const displayTempMax = computed(() =>
+  detail.value ? convertTemp(detail.value.tempMax, configStore.unit) : null,
+)
+const displayTempMin = computed(() =>
+  detail.value ? convertTemp(detail.value.tempMin, configStore.unit) : null,
+)
 
 function goBackToDashboard() {
   router.push('/')
@@ -61,12 +73,26 @@ function goBackToDashboard() {
           <div class="stat-value">{{ displayTemp }}{{ configStore.unitSymbol }}</div>
         </div>
         <div class="stat-tile">
+          <div class="stat-label">체감온도</div>
+          <div class="stat-value">{{ displayFeelsLike }}{{ configStore.unitSymbol }}</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">최고 / 최저</div>
+          <div class="stat-value">{{ displayTempMax }}° / {{ displayTempMin }}°</div>
+        </div>
+        <div class="stat-tile">
           <div class="stat-label">대기 습도</div>
           <div class="stat-value">{{ detail.humidity }}%</div>
         </div>
         <div class="stat-tile">
           <div class="stat-label">현재 풍속</div>
           <div class="stat-value">{{ detail.windSpeed }}m/s</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">일출 · 일몰</div>
+          <div class="stat-value" style="font-size: 1.3rem">
+            {{ detail.sunrise }} · {{ detail.sunset }}
+          </div>
         </div>
       </div>
 

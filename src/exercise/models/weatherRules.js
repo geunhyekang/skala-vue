@@ -13,3 +13,10 @@ export function matchesSearch(city, term) {
   if (!term.trim()) return true
   return city.name.includes(term)
 }
+
+export function convertTemp(tempCelsius, unit) {
+  if (unit === 'fahrenheit') {
+    return Math.round((tempCelsius * 9) / 5 + 32)
+  }
+  return tempCelsius
+}
