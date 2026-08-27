@@ -1,10 +1,13 @@
 :root {
-  --toss-bg: #f2f4f6;
   --toss-text: #191f28;
+  --toss-text-secondary: #8b95a1;
+  --toss-border: #e5e8eb;
+  --toss-blue: #3182f6;
+  --toss-blue-dark: #1b64da;
 }
 
 body {
-  background: var(--toss-bg);
+  background: #ffffff;
   color: var(--toss-text);
   font-family:
     'Pretendard',
@@ -13,15 +16,100 @@ body {
     sans-serif;
 }
 
-.p-card {
-  border: none !important;
-  border-radius: 20px !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05) !important;
+.section-heading {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 32px 0 12px;
+  color: var(--toss-text);
 }
 
-.p-card .p-card-title {
-  font-weight: 700;
+.weather-row {
+  display: block;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--toss-border);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.weather-row:hover {
+  background: #f9fafb;
+}
+.weather-row:last-child {
+  border-bottom: none;
+}
+
+.weather-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.weather-row-name {
   font-size: 1.05rem;
+  font-weight: 700;
+}
+.weather-row-temp {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.weather-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-right: 6px;
+}
+.weather-tag.hot {
+  background: #fff1f0;
+  color: #eb4c3f;
+}
+.weather-tag.cool {
+  background: #eef4ff;
+  color: var(--toss-blue-dark);
+}
+.weather-tag.humid {
+  background: #eefaf9;
+  color: #0aa89e;
+}
+
+.favorite-toggle {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  margin-top: 8px;
+  display: inline-block;
+  color: #d8dce1;
+}
+.favorite-toggle.active {
+  color: #ffb800;
+}
+
+.promo-card {
+  background: linear-gradient(135deg, #3182f6 0%, #1b64da 100%);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 20px 22px;
+  margin: 8px 0 24px;
+}
+.promo-card .promo-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.promo-card .promo-sub {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.p-card {
+  box-shadow: none !important;
+  border: 1px solid var(--toss-border) !important;
+  border-radius: 16px !important;
 }
 
 .p-button {
@@ -30,21 +118,15 @@ body {
   border: none !important;
 }
 
-.p-tag {
-  border-radius: 999px !important;
-  font-weight: 600 !important;
-  padding: 4px 12px !important;
+.p-inputtext {
+  border-radius: 12px !important;
+  border: 1px solid var(--toss-border) !important;
+  background: #fff !important;
 }
 
 .p-message {
   border-radius: 16px !important;
   border: none !important;
-}
-
-.p-inputtext {
-  border-radius: 12px !important;
-  border: 1px solid #e5e8eb !important;
-  background: #f9fafb !important;
 }
 
 .p-toolbar {

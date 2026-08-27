@@ -1,16 +1,12 @@
 <script setup>
-import Card from 'primevue/card'
-
 defineProps({
   title: { type: String, required: true },
 })
 </script>
 
 <template>
-  <Card class="mb-4">
-    <template #title>{{ title }}</template>
-    <template #content>
-      <slot />
-    </template>
-  </Card>
+  <section>
+    <h2 class="section-heading">{{ title }}</h2>
+    <slot />
+  </section>
 </template>

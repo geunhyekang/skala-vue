@@ -1,36 +1,32 @@
 <script setup>
-import Button from 'primevue/button'
+import { useRoute } from 'vue-router'
 import UnitToggler from './exercise/components/UnitToggler.vue'
 
+const route = useRoute()
+
 const navItems = [
-  { label: '대시보드', to: '/' },
-  { label: '소개', to: '/about' },
-  { label: '통계', to: '/stats' },
+  { label: '대시보드', to: '/', name: 'weather-home' },
+  { label: '소개', to: '/about', name: 'weather-about' },
+  { label: '통계', to: '/stats', name: 'weather-stats' },
 ]
 </script>
 
 <template>
   <div id="app-shell">
     <header class="app-header">
-      <span class="app-title">🌤 날씨</span>
-      <nav class="nav-buttons">
+      <span class="app-logo">🌤 날씨</span>
+      <nav class="nav-links">
         <RouterLink
           v-for="item in navItems"
           :key="item.to"
           :to="item.to"
-          v-slot="{ navigate, isActive }"
-          custom
+          class="nav-link"
+          :class="{ 'nav-link-active': route.name === item.name }"
         >
-          <Button
-            :label="item.label"
-            :severity="isActive ? undefined : 'secondary'"
-            :text="!isActive"
-            size="small"
-            @click="navigate"
-          />
+          {{ item.label }}
         </RouterLink>
       </nav>
-      <UnitToggler />
+      <UnitToggler v-if="route.name === 'weather-home'" />
     </header>
 
     <main class="main-content">
@@ -47,18 +43,27 @@ const navItems = [
 .app-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 16px 4px;
+  gap: 20px;
+  padding: 20px 4px 16px;
+  border-bottom: 1px solid #e5e8eb;
 }
-.app-title {
+.app-logo {
   font-weight: 800;
-  font-size: 1.1rem;
-  margin-right: 8px;
+  font-size: 1.05rem;
 }
-.nav-buttons {
+.nav-links {
   display: flex;
-  gap: 4px;
+  gap: 16px;
   margin-right: auto;
+}
+.nav-link {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #8b95a1;
+  text-decoration: none;
+}
+.nav-link-active {
+  color: #191f28;
 }
 .main-content {
   padding: 0 4px 32px;

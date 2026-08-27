@@ -1,16 +1,13 @@
 <script setup>
-import Message from 'primevue/message'
-
 defineProps({
-  message: { type: String, required: true },
-  clickCount: { type: Number, default: 0 },
+  favoriteCount: { type: Number, default: 0 },
   averageTemp: { type: Number, default: 0 },
 })
 </script>
 
 <template>
-  <Message severity="success" :closable="false" class="mb-4">
-    <div>{{ message }}</div>
-    <div class="text-sm">클릭 횟수: {{ clickCount }}회 · 평균 기온: {{ averageTemp }}°C</div>
-  </Message>
+  <div class="promo-card">
+    <div class="promo-title">⭐ 즐겨찾기 {{ favoriteCount }}개</div>
+    <div class="promo-sub">현재 평균 기온 {{ averageTemp }}°C</div>
+  </div>
 </template>

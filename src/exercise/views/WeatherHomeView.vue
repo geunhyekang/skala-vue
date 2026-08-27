@@ -1,24 +1,23 @@
 <script setup>
-import { ref, computed, watch, watchEffect, onMounted } from 'vue'
+import { ref, computed, watchEffect, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchWeatherList } from '../services/weatherService'
 import { matchesSearch } from '../models/weatherRules'
+import { useConfigStore } from '../../stores/configStore'
 import BaseDashboardCard from '../components/BaseDashboardCard.vue'
 import SearchBar from '../components/SearchBar.vue'
 import WeatherCard from '../components/WeatherCard.vue'
 import StatusBanner from '../components/StatusBanner.vue'
-
 import ProgressSpinner from 'primevue/progressspinner'
 import Message from 'primevue/message'
 
 const router = useRouter()
+const configStore = useConfigStore()
 
 const weatherList = ref([])
 const isLoading = ref(true)
 const loadError = ref(null)
 const searchQuery = ref('')
-const selectedCityInfo = ref('카드를 클릭하거나 검색해 보세요.')
-const clickCount = ref(0)
 
 onMounted(async () => {
   try {
@@ -34,14 +33,14 @@ const filteredWeatherList = computed(() =>
   weatherList.value.filter((city) => matchesSearch(city, searchQuery.value)),
 )
 
+const favoriteWeatherList = computed(() =>
+  weatherList.value.filter((city) => configStore.isFavorite(city.id)),
+)
+
 const averageTemp = computed(() => {
   if (filteredWeatherList.value.length === 0) return 0
   const sum = filteredWeatherList.value.reduce((acc, city) => acc + city.temp, 0)
   return Math.round((sum / filteredWeatherList.value.length) * 10) / 10
-})
-
-watch(selectedCityInfo, (newValue) => {
-  console.log(`[watch 감지] 상태 바 문구가 업데이트되었습니다 -> "${newValue}"`)
 })
 
 watchEffect(() => {
@@ -54,11 +53,6 @@ function handleUpdateQuery(value) {
   searchQuery.value = value
 }
 
-function handleSelectCard(cityName) {
-  selectedCityInfo.value = `${cityName}이 선택되었습니다.`
-  clickCount.value += 1
-}
-
 function handleClickDetail({ id }) {
   router.push('/weather/' + id)
 }
@@ -66,11 +60,7 @@ function handleClickDetail({ id }) {
 
 <template>
   <div>
-    <StatusBanner
-      :message="selectedCityInfo"
-      :click-count="clickCount"
-      :average-temp="averageTemp"
-    />
+    <StatusBanner :favorite-count="configStore.favoriteCount" :average-temp="averageTemp" />
 
     <div v-if="isLoading" class="flex justify-content-center my-6">
       <ProgressSpinner />
@@ -80,6 +70,15 @@ function handleClickDetail({ id }) {
     }}</Message>
 
     <template v-else>
+      <BaseDashboardCard v-if="favoriteWeatherList.length > 0" title="⭐ 즐겨찾기한 지역">
+        <WeatherCard
+          v-for="city in favoriteWeatherList"
+          :key="city.id"
+          :city="city"
+          @click-detail="handleClickDetail"
+        />
+      </BaseDashboardCard>
+
       <BaseDashboardCard title="🔍 도시 검색 (한글 즉시 동기화)">
         <SearchBar :search-query="searchQuery" @update-query="handleUpdateQuery" />
       </BaseDashboardCard>
@@ -89,7 +88,6 @@ function handleClickDetail({ id }) {
           v-for="city in filteredWeatherList"
           :key="city.id"
           :city="city"
-          @select-card="handleSelectCard"
           @click-detail="handleClickDetail"
         />
         <Message v-if="filteredWeatherList.length === 0" severity="info" :closable="false">
@@ -99,14 +97,3 @@ function handleClickDetail({ id }) {
     </template>
   </div>
 </template>
-
-<style scoped>
-.empty {
-  text-align: center;
-  color: #888;
-}
-.error {
-  text-align: center;
-  color: #c0392b;
-}
-</style>

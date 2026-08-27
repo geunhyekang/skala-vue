@@ -1,8 +1,5 @@
 <script setup>
 import { computed } from 'vue'
-import Card from 'primevue/card'
-import Tag from 'primevue/tag'
-import Button from 'primevue/button'
 import { isHot, isHumid } from '../models/weatherRules'
 import { useConfigStore } from '../../stores/configStore'
 
@@ -10,8 +7,7 @@ const props = defineProps({
   city: { type: Object, required: true },
 })
 
-const emit = defineEmits(['select-card', 'click-detail'])
-
+const emit = defineEmits(['click-detail'])
 const configStore = useConfigStore()
 
 const displayTemp = computed(() => {
@@ -21,10 +17,6 @@ const displayTemp = computed(() => {
   }
   return rawTemp
 })
-
-function handleSelect() {
-  emit('select-card', props.city.name)
-}
 
 function handleDetail() {
   emit('click-detail', { id: props.city.id, name: props.city.name, status: props.city.status })
@@ -36,27 +28,22 @@ function handleToggleFavorite() {
 </script>
 
 <template>
-  <Card class="mb-3 cursor-pointer" @click="handleSelect">
-    <template #title>
-      <div class="flex justify-content-between">
-        <span>{{ city.name }}</span>
-        <span>{{ displayTemp }}{{ configStore.unitSymbol }}</span>
-      </div>
-    </template>
-    <template #content>
-      <Tag v-if="isHot(city)" severity="danger" value="🔥 더움 (25도 이상)" class="mr-2" />
-      <Tag v-else severity="info" value="❄ 선선함 (25도 미만)" class="mr-2" />
-      <Tag v-if="isHumid(city)" severity="secondary" :value="`💧 습도 높음 (${city.humidity}%)`" />
-    </template>
-    <template #footer>
-      <Button
-        :label="configStore.isFavorite(city.id) ? '★ 즐겨찾기' : '☆ 즐겨찾기'"
-        severity="secondary"
-        size="small"
-        class="mr-2"
-        @click.stop="handleToggleFavorite"
-      />
-      <Button label="상세보기" size="small" @click.stop="handleDetail" />
-    </template>
-  </Card>
+  <div class="weather-row" @click="handleDetail">
+    <div class="weather-row-top">
+      <span class="weather-row-name">{{ city.name }}</span>
+      <span class="weather-row-temp">{{ displayTemp }}{{ configStore.unitSymbol }}</span>
+    </div>
+
+    <span v-if="isHot(city)" class="weather-tag hot">🔥 더움 (25도 이상)</span>
+    <span v-else class="weather-tag cool">❄ 선선함 (25도 미만)</span>
+    <span v-if="isHumid(city)" class="weather-tag humid">💧 습도 높음 ({{ city.humidity }}%)</span>
+
+    <button
+      class="favorite-toggle"
+      :class="{ active: configStore.isFavorite(city.id) }"
+      @click.stop="handleToggleFavorite"
+    >
+      {{ configStore.isFavorite(city.id) ? '★' : '☆' }} 즐겨찾기
+    </button>
+  </div>
 </template>
