@@ -1,19 +1,38 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { fetchWeatherDetail } from '../services/weatherService'
+import { fetchWeatherDetail, fetchWeatherForecast } from '../services/weatherService'
+import { useConfigStore } from '../../stores/configStore'
 
 const props = defineProps({
   cityId: { type: String, required: true },
 })
 
 const router = useRouter()
+const configStore = useConfigStore()
 const detail = ref(null)
+const forecast = ref([])
 const isLoading = ref(true)
+const loadError = ref(null)
 
 onMounted(async () => {
-  detail.value = await fetchWeatherDetail(props.cityId)
-  isLoading.value = false
+  try {
+    detail.value = await fetchWeatherDetail(props.cityId)
+    forecast.value = await fetchWeatherForecast(props.cityId)
+  } catch (err) {
+    loadError.value = '날씨 정보를 불러오지 못했습니다.'
+  } finally {
+    isLoading.value = false
+  }
+})
+
+const displayTemp = computed(() => {
+  if (!detail.value) return null
+  const rawTemp = detail.value.temp
+  if (configStore.unit === 'fahrenheit') {
+    return Math.round((rawTemp * 9) / 5 + 32)
+  }
+  return rawTemp
 })
 
 function goBackToDashboard() {
@@ -57,31 +76,3 @@ function goBackToDashboard() {
     >
   </div>
 </template>
-
-<style scoped>
-.weather-detail {
-  text-align: center;
-}
-.detail-card {
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 16px;
-  margin: 16px 0;
-  text-align: left;
-}
-.detail-card p {
-  margin: 6px 0;
-}
-.back-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  background: #3550d4;
-  color: #fff;
-  cursor: pointer;
-}
-.empty {
-  color: #888;
-  margin: 20px 0;
-}
-</style>
