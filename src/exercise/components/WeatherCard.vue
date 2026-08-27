@@ -51,7 +51,7 @@ function handleToggleFavorite() {
     <template #footer>
       <Button
         :label="configStore.isFavorite(city.id) ? '★ 즐겨찾기' : '☆ 즐겨찾기'"
-        severity="warn"
+        severity="secondary"
         size="small"
         class="mr-2"
         @click.stop="handleToggleFavorite"

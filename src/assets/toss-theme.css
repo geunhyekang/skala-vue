@@ -1,0 +1,54 @@
+:root {
+  --toss-bg: #f2f4f6;
+  --toss-text: #191f28;
+}
+
+body {
+  background: var(--toss-bg);
+  color: var(--toss-text);
+  font-family:
+    'Pretendard',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+.p-card {
+  border: none !important;
+  border-radius: 20px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+.p-card .p-card-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.p-button {
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  border: none !important;
+}
+
+.p-tag {
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+  padding: 4px 12px !important;
+}
+
+.p-message {
+  border-radius: 16px !important;
+  border: none !important;
+}
+
+.p-inputtext {
+  border-radius: 12px !important;
+  border: 1px solid #e5e8eb !important;
+  background: #f9fafb !important;
+}
+
+.p-toolbar {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
