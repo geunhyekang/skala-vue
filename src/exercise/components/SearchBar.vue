@@ -1,8 +1,4 @@
 <script setup>
-import InputText from 'primevue/inputtext'
-import IconField from 'primevue/iconfield'
-import InputIcon from 'primevue/inputicon'
-
 defineProps({
   searchQuery: { type: String, default: '' },
 })
@@ -15,16 +11,15 @@ function handleInput(event) {
 </script>
 
 <template>
-  <div>
-    <IconField>
-      <InputIcon class="pi pi-search" />
-      <InputText
-        :model-value="searchQuery"
-        placeholder="검색할 도시 이름 입력"
-        class="w-full"
-        @input="handleInput"
-      />
-    </IconField>
-    <p class="text-sm text-color-secondary mt-2">검색 중인 도시: {{ searchQuery || '없음' }}</p>
+  <div class="chat-search">
+    <input
+      :value="searchQuery"
+      type="text"
+      placeholder="검색할 도시 이름을 입력해보세요"
+      @input="handleInput"
+    />
+    <button class="send-btn" type="button" aria-label="검색">
+      <i class="pi pi-search" />
+    </button>
   </div>
 </template>

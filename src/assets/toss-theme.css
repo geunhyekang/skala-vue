@@ -2,8 +2,9 @@
   --toss-text: #191f28;
   --toss-text-secondary: #8b95a1;
   --toss-border: #e5e8eb;
-  --toss-blue: #3182f6;
-  --toss-blue-dark: #1b64da;
+  --brand-blue: #3182f6;
+  --brand-blue-dark: #1b64da;
+  --brand-yellow: #ffd400;
 }
 
 body {
@@ -16,85 +17,82 @@ body {
     sans-serif;
 }
 
-.section-heading {
-  font-size: 1.15rem;
+/* ===== 히어로 배너 (대시보드 상단) ===== */
+.hero-banner {
+  background: linear-gradient(180deg, #e8f1ff 0%, #ffffff 100%);
+  border-radius: 28px;
+  padding: 48px 48px 44px;
+  margin: 24px 0 32px;
+  text-align: left;
+}
+.hero-banner .hero-emoji {
+  font-size: 2.6rem;
+  margin-bottom: 12px;
+}
+.hero-banner .hero-title {
+  font-size: 2rem;
   font-weight: 800;
-  margin: 32px 0 12px;
-  color: var(--toss-text);
+  line-height: 1.4;
+  margin-bottom: 10px;
 }
-
-.weather-row {
-  display: block;
-  padding: 18px 4px;
-  border-bottom: 1px solid var(--toss-border);
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-.weather-row:hover {
-  background: #f9fafb;
-}
-.weather-row:last-child {
-  border-bottom: none;
-}
-
-.weather-row-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 8px;
-}
-.weather-row-name {
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-.weather-row-temp {
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-
-.weather-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  margin-right: 6px;
-}
-.weather-tag.hot {
-  background: #fff1f0;
-  color: #eb4c3f;
-}
-.weather-tag.cool {
-  background: #eef4ff;
-  color: var(--toss-blue-dark);
-}
-.weather-tag.humid {
-  background: #eefaf9;
-  color: #0aa89e;
-}
-
-.favorite-toggle {
-  background: none;
-  border: none;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 2px 6px;
-  margin-top: 8px;
+.hero-banner .hero-highlight {
   display: inline-block;
-  color: #d8dce1;
+  background: var(--brand-blue);
+  color: #fff;
+  padding: 2px 12px;
+  border-radius: 10px;
 }
-.favorite-toggle.active {
-  color: #ffb800;
+.hero-banner .hero-sub {
+  font-size: 0.95rem;
+  color: var(--toss-text-secondary);
+  margin-bottom: 24px;
 }
 
+/* ===== 채팅형 검색 인풋 ===== */
+.chat-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 560px;
+  background: #ffffff;
+  border: 1px solid var(--toss-border);
+  border-radius: 999px;
+  padding: 6px 6px 6px 20px;
+  box-shadow: 0 4px 16px rgba(25, 31, 40, 0.08);
+}
+.chat-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  background: transparent;
+  min-width: 0;
+}
+.chat-search .send-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--brand-blue);
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ===== 프로모 카드 (즐겨찾기 요약 + 단위변경) ===== */
 .promo-card {
   background: linear-gradient(135deg, #3182f6 0%, #1b64da 100%);
-  color: #ffffff;
+  color: #fff;
   border-radius: 20px;
   padding: 20px 22px;
-  margin: 8px 0 24px;
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 .promo-card .promo-title {
   font-size: 1rem;
@@ -106,31 +104,195 @@ body {
   opacity: 0.85;
 }
 
+.unit-pill {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.15);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.unit-pill:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ===== 소개 페이지 CTA 버튼 ===== */
+.pill-button-primary {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 999px;
+  background: var(--brand-blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+/* ===== STEP 카드 (소개 페이지) ===== */
+.step-card {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--toss-border);
+}
+.step-card:last-child {
+  border-bottom: none;
+}
+.step-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--brand-blue);
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+.step-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.step-desc {
+  font-size: 0.88rem;
+  color: var(--toss-text-secondary);
+  line-height: 1.5;
+}
+
+/* ===== 섹션 헤더 ===== */
+.section-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 32px 0 14px;
+}
+.section-heading {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--toss-text);
+  margin: 0;
+}
+
+/* ===== 카드 그리드 (즐겨찾기 / 지역별 날씨 현황) ===== */
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.grid-full {
+  grid-column: 1 / -1;
+}
+
+.weather-tile {
+  position: relative;
+  border: 1px solid var(--toss-border);
+  border-radius: 16px;
+  padding: 18px;
+  padding-right: 44px;
+  cursor: pointer;
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+.weather-tile:hover {
+  box-shadow: 0 6px 20px rgba(25, 31, 40, 0.08);
+  border-color: #d3d9e0;
+}
+
+.favorite-toggle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #f2f4f6;
+  color: #c3c9d1;
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.favorite-toggle.active {
+  background: #fff8e1;
+  color: #ffb800;
+}
+
+.weather-row-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--toss-text-secondary);
+  margin-bottom: 4px;
+}
+.weather-row-temp {
+  font-size: 1.9rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.weather-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.weather-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.weather-tag.hot {
+  background: #fff1f0;
+  color: #eb4c3f;
+}
+.weather-tag.cool {
+  background: #eef4ff;
+  color: var(--brand-blue-dark);
+}
+.weather-tag.humid {
+  background: #eefaf9;
+  color: #0aa89e;
+}
+
+/* ===== 통계 페이지 ===== */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.stat-tile {
+  border: 1px solid var(--toss-border);
+  border-radius: 16px;
+  padding: 24px 20px;
+}
+.stat-tile .stat-label {
+  font-size: 0.85rem;
+  color: var(--toss-text-secondary);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.stat-tile .stat-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--toss-text);
+}
+
+/* ===== 남은 PrimeVue 컴포넌트 (상세 페이지 등) 톤 맞추기 ===== */
 .p-card {
   box-shadow: none !important;
   border: 1px solid var(--toss-border) !important;
   border-radius: 16px !important;
 }
-
-.p-button {
-  border-radius: 12px !important;
-  font-weight: 700 !important;
-  border: none !important;
-}
-
-.p-inputtext {
-  border-radius: 12px !important;
-  border: 1px solid var(--toss-border) !important;
-  background: #fff !important;
-}
-
 .p-message {
   border-radius: 16px !important;
   border: none !important;
-}
-
-.p-toolbar {
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
 }

@@ -1,32 +1,32 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import UnitToggler from './exercise/components/UnitToggler.vue'
 
 const route = useRoute()
 
 const navItems = [
   { label: '대시보드', to: '/', name: 'weather-home' },
-  { label: '소개', to: '/about', name: 'weather-about' },
   { label: '통계', to: '/stats', name: 'weather-stats' },
+  { label: '소개', to: '/about', name: 'weather-about' },
 ]
 </script>
 
 <template>
   <div id="app-shell">
-    <header class="app-header">
-      <span class="app-logo">🌤 날씨</span>
-      <nav class="nav-links">
-        <RouterLink
-          v-for="item in navItems"
-          :key="item.to"
-          :to="item.to"
-          class="nav-link"
-          :class="{ 'nav-link-active': route.name === item.name }"
-        >
-          {{ item.label }}
-        </RouterLink>
-      </nav>
-      <UnitToggler v-if="route.name === 'weather-home'" />
+    <header class="site-header">
+      <div class="site-header-inner">
+        <span class="app-logo">🌤 날씨</span>
+        <nav class="site-nav">
+          <RouterLink
+            v-for="item in navItems"
+            :key="item.to"
+            :to="item.to"
+            class="nav-link"
+            :class="{ 'nav-link-active': route.name === item.name }"
+          >
+            {{ item.label }}
+          </RouterLink>
+        </nav>
+      </div>
     </header>
 
     <main class="main-content">
@@ -37,27 +37,30 @@ const navItems = [
 
 <style scoped>
 #app-shell {
-  max-width: 480px;
-  margin: 0 auto;
+  width: 100%;
 }
-.app-header {
+.site-header {
+  border-bottom: 1px solid #e5e8eb;
+  padding: 0 32px;
+}
+.site-header-inner {
+  max-width: 1080px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 20px 4px 16px;
-  border-bottom: 1px solid #e5e8eb;
+  gap: 36px;
+  height: 64px;
 }
 .app-logo {
   font-weight: 800;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
 }
-.nav-links {
+.site-nav {
   display: flex;
-  gap: 16px;
-  margin-right: auto;
+  gap: 28px;
 }
 .nav-link {
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #8b95a1;
   text-decoration: none;
@@ -66,6 +69,8 @@ const navItems = [
   color: #191f28;
 }
 .main-content {
-  padding: 0 4px 32px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 32px 48px;
 }
 </style>

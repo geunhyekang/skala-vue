@@ -28,22 +28,25 @@ function handleToggleFavorite() {
 </script>
 
 <template>
-  <div class="weather-row" @click="handleDetail">
-    <div class="weather-row-top">
-      <span class="weather-row-name">{{ city.name }}</span>
-      <span class="weather-row-temp">{{ displayTemp }}{{ configStore.unitSymbol }}</span>
-    </div>
-
-    <span v-if="isHot(city)" class="weather-tag hot">🔥 더움 (25도 이상)</span>
-    <span v-else class="weather-tag cool">❄ 선선함 (25도 미만)</span>
-    <span v-if="isHumid(city)" class="weather-tag humid">💧 습도 높음 ({{ city.humidity }}%)</span>
-
+  <div class="weather-tile" @click="handleDetail">
     <button
       class="favorite-toggle"
       :class="{ active: configStore.isFavorite(city.id) }"
+      :aria-label="configStore.isFavorite(city.id) ? '즐겨찾기 해제' : '즐겨찾기 추가'"
       @click.stop="handleToggleFavorite"
     >
-      {{ configStore.isFavorite(city.id) ? '★' : '☆' }} 즐겨찾기
+      {{ configStore.isFavorite(city.id) ? '★' : '☆' }}
     </button>
+
+    <div class="weather-row-name">{{ city.name }}</div>
+    <div class="weather-row-temp">{{ displayTemp }}{{ configStore.unitSymbol }}</div>
+
+    <div class="weather-tags">
+      <span v-if="isHot(city)" class="weather-tag hot">🔥 더움 (25도 이상)</span>
+      <span v-else class="weather-tag cool">❄ 선선함 (25도 미만)</span>
+      <span v-if="isHumid(city)" class="weather-tag humid"
+        >💧 습도 높음 ({{ city.humidity }}%)</span
+      >
+    </div>
   </div>
 </template>

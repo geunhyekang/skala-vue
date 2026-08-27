@@ -8,6 +8,7 @@ import BaseDashboardCard from '../components/BaseDashboardCard.vue'
 import SearchBar from '../components/SearchBar.vue'
 import WeatherCard from '../components/WeatherCard.vue'
 import StatusBanner from '../components/StatusBanner.vue'
+import UnitToggler from '../components/UnitToggler.vue'
 import ProgressSpinner from 'primevue/progressspinner'
 import Message from 'primevue/message'
 
@@ -60,6 +61,16 @@ function handleClickDetail({ id }) {
 
 <template>
   <div>
+    <div class="hero-banner">
+      <div class="hero-emoji">🌤️</div>
+      <div class="hero-title">
+        궁금한 지역 날씨,<br />
+        <span class="hero-highlight">한 번에</span> 검색해보세요
+      </div>
+      <div class="hero-sub">한글로 도시 이름만 입력하면 바로 찾아드려요</div>
+      <SearchBar :search-query="searchQuery" @update-query="handleUpdateQuery" />
+    </div>
+
     <StatusBanner :favorite-count="configStore.favoriteCount" :average-temp="averageTemp" />
 
     <div v-if="isLoading" class="flex justify-content-center my-6">
@@ -70,17 +81,18 @@ function handleClickDetail({ id }) {
     }}</Message>
 
     <template v-else>
-      <BaseDashboardCard v-if="favoriteWeatherList.length > 0" title="⭐ 즐겨찾기한 지역">
-        <WeatherCard
-          v-for="city in favoriteWeatherList"
-          :key="city.id"
-          :city="city"
-          @click-detail="handleClickDetail"
-        />
-      </BaseDashboardCard>
-
-      <BaseDashboardCard title="🔍 도시 검색 (한글 즉시 동기화)">
-        <SearchBar :search-query="searchQuery" @update-query="handleUpdateQuery" />
+      <BaseDashboardCard title="⭐ 즐겨찾기한 지역">
+        <template v-if="favoriteWeatherList.length > 0">
+          <WeatherCard
+            v-for="city in favoriteWeatherList"
+            :key="city.id"
+            :city="city"
+            @click-detail="handleClickDetail"
+          />
+        </template>
+        <Message v-else severity="info" :closable="false" class="grid-full">
+          아직 즐겨찾기한 지역이 없어요. 카드의 ☆ 버튼을 눌러 추가해보세요.
+        </Message>
       </BaseDashboardCard>
 
       <BaseDashboardCard title="📋 지역별 날씨 현황">
@@ -90,7 +102,12 @@ function handleClickDetail({ id }) {
           :city="city"
           @click-detail="handleClickDetail"
         />
-        <Message v-if="filteredWeatherList.length === 0" severity="info" :closable="false">
+        <Message
+          v-if="filteredWeatherList.length === 0"
+          severity="info"
+          :closable="false"
+          class="grid-full"
+        >
           검색 결과와 일치하는 도시가 없습니다.
         </Message>
       </BaseDashboardCard>

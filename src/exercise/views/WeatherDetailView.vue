@@ -3,11 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchWeatherDetail, fetchWeatherForecast } from '../services/weatherService'
 import { useConfigStore } from '../../stores/configStore'
-import Card from 'primevue/card'
-import Button from 'primevue/button'
-import Message from 'primevue/message'
 import ProgressSpinner from 'primevue/progressspinner'
-import Timeline from 'primevue/timeline'
 
 const props = defineProps({
   cityId: { type: String, required: true },
@@ -47,40 +43,57 @@ function goBackToDashboard() {
 
 <template>
   <div>
-    <h3>📍 지역별 상세 기상관측 정보</h3>
+    <h2 class="section-heading" style="margin-top: 32px">📍 지역별 상세 기상관측 정보</h2>
 
     <div v-if="isLoading" class="flex justify-content-center my-6">
       <ProgressSpinner />
     </div>
-    <Message v-else-if="loadError" severity="error" :closable="false">{{ loadError }}</Message>
+    <p v-else-if="loadError" style="color: #eb4c3f">{{ loadError }}</p>
 
     <template v-else-if="detail">
-      <Card class="mb-4">
-        <template #content>
-          <p>관측 지점: {{ detail.region }}</p>
-          <p>기상 기온: {{ displayTemp }}{{ configStore.unitSymbol }}</p>
-          <p>대기 습도: {{ detail.humidity }}%</p>
-          <p>현재 풍속: {{ detail.windSpeed }}m/s</p>
-        </template>
-      </Card>
+      <p style="color: var(--toss-text-secondary); font-weight: 600; margin-bottom: 4px">
+        {{ detail.region }}
+      </p>
 
-      <Card v-if="forecast.length" class="mb-4">
-        <template #title>🕒 다음 예보 (3시간 단위)</template>
-        <template #content>
-          <Timeline :value="forecast">
-            <template #content="slotProps">
-              {{ slotProps.item.time.slice(5, 16) }} · {{ slotProps.item.temp }}°C ·
-              {{ slotProps.item.status }}
-            </template>
-          </Timeline>
-        </template>
-      </Card>
+      <div class="stat-grid">
+        <div class="stat-tile">
+          <div class="stat-label">기온</div>
+          <div class="stat-value">{{ displayTemp }}{{ configStore.unitSymbol }}</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">대기 습도</div>
+          <div class="stat-value">{{ detail.humidity }}%</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">현재 풍속</div>
+          <div class="stat-value">{{ detail.windSpeed }}m/s</div>
+        </div>
+      </div>
+
+      <template v-if="forecast.length">
+        <h2 class="section-heading">🕒 다음 예보 (3시간 단위)</h2>
+        <div class="stat-grid">
+          <div v-for="item in forecast" :key="item.time" class="stat-tile">
+            <div class="stat-label">{{ item.time.slice(5, 16) }}</div>
+            <div class="stat-value" style="font-size: 1.3rem">{{ item.temp }}°C</div>
+            <div style="color: var(--toss-text-secondary); font-size: 0.85rem; margin-top: 4px">
+              {{ item.status }}
+            </div>
+          </div>
+        </div>
+      </template>
     </template>
 
-    <Message v-else severity="warn" :closable="false">
+    <p v-else style="color: var(--toss-text-secondary)">
       해당 도시({{ cityId }})의 관측 정보를 찾을 수 없습니다.
-    </Message>
+    </p>
 
-    <Button label="← 메인 대시보드로 돌아가기" class="mt-2" @click="goBackToDashboard" />
+    <button
+      class="pill-button-primary"
+      style="width: auto; padding: 12px 24px; margin-top: 28px"
+      @click="goBackToDashboard"
+    >
+      ← 메인 대시보드로 돌아가기
+    </button>
   </div>
 </template>
