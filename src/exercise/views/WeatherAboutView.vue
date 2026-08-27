@@ -1,7 +1,18 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { fetchUsdToKrwRate } from '../services/exchangeRateApi'
 
 const router = useRouter()
+const usdToKrw = ref(null)
+
+onMounted(async () => {
+  try {
+    usdToKrw.value = await fetchUsdToKrwRate()
+  } catch (err) {
+    usdToKrw.value = null
+  }
+})
 
 function goToDashboard() {
   router.push('/')
@@ -11,14 +22,15 @@ function goToDashboard() {
 <template>
   <div class="about-view">
     <h3>ℹ️ 서비스 소개</h3>
-    <p>이 앱은 Vue 3와 Vue Router 학습을 위한 날씨 대시보드 시뮬레이션입니다.</p>
+    <p>이 앱은 Vue 3, Vue Router, Pinia, Axios 학습을 위한 날씨 대시보드입니다.</p>
     <ul>
-      <li>
-        <code>components/exercise</code> 폴더의 컴포넌트가 실시간 API 대신 Mock 데이터를 표시합니다.
-      </li>
-      <li>도시를 클릭하면 상세 페이지로 이동하며, 주소만으로 같은 화면을 다시 열 수 있습니다.</li>
+      <li>날씨 데이터는 OpenWeatherMap API에서 실시간으로 가져옵니다.</li>
+      <li>도시를 클릭하면 상세 페이지로 이동하며, 3시간 단위 예보도 함께 보여줍니다.</li>
       <li>존재하지 않는 경로로 이동하면 Catch-all Route가 404 페이지를 보여줍니다.</li>
     </ul>
+    <p v-if="usdToKrw" class="fun-fact">
+      💱 오늘의 환율(기타 외부 API): 1 USD ≈ {{ Math.round(usdToKrw) }} KRW
+    </p>
     <button class="cta-button" @click="goToDashboard">메인 대시보드로 이동</button>
   </div>
 </template>
@@ -31,6 +43,10 @@ function goToDashboard() {
   padding-left: 20px;
   color: #444;
   line-height: 1.6;
+}
+.fun-fact {
+  margin-top: 12px;
+  color: #2f7a2f;
 }
 .cta-button {
   display: block;
