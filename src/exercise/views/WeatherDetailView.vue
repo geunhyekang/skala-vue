@@ -1,19 +1,30 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchWeatherDetail } from '../services/weatherService'
+import { useConfigStore } from '../../stores/configStore'
 
 const props = defineProps({
   cityId: { type: String, required: true },
 })
 
 const router = useRouter()
+const configStore = useConfigStore()
 const detail = ref(null)
 const isLoading = ref(true)
 
 onMounted(async () => {
   detail.value = await fetchWeatherDetail(props.cityId)
   isLoading.value = false
+})
+
+const displayTemp = computed(() => {
+  if (!detail.value) return null
+  const rawTemp = detail.value.temp
+  if (configStore.unit === 'fahrenheit') {
+    return Math.round((rawTemp * 9) / 5 + 32)
+  }
+  return rawTemp
 })
 
 function goBackToDashboard() {
@@ -28,7 +39,7 @@ function goBackToDashboard() {
     <p v-if="isLoading">불러오는 중...</p>
     <div v-else-if="detail" class="detail-card">
       <p>관측 지점: {{ detail.region }}</p>
-      <p>기상 기온: {{ detail.temp }}°C</p>
+      <p>기상 기온: {{ displayTemp }}{{ configStore.unitSymbol }}</p>
       <p>대기 습도: {{ detail.humidity }}%</p>
       <p>현재 풍속: {{ detail.windSpeed }}m/s</p>
     </div>
