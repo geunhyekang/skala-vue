@@ -2,7 +2,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchWeatherDetail, fetchWeatherForecast } from '../services/weatherService'
-import { convertTemp } from '../models/weatherRules'
+import { fetchAirQuality } from '../services/airQualityApi'
+import { convertTemp, classifyAirQuality } from '../models/weatherRules'
 import { useConfigStore } from '../../stores/configStore'
 import { useCityStore } from '../../stores/cityStore'
 import ProgressSpinner from 'primevue/progressspinner'
@@ -16,6 +17,7 @@ const configStore = useConfigStore()
 const cityStore = useCityStore()
 const detail = ref(null)
 const forecast = ref([])
+const airQuality = ref(null)
 const isLoading = ref(true)
 const loadError = ref(null)
 
@@ -28,8 +30,16 @@ onMounted(async () => {
   try {
     detail.value = await fetchWeatherDetail(city)
     forecast.value = await fetchWeatherForecast(city)
-  } catch (err) {
+  } catch {
     loadError.value = '날씨 정보를 불러오지 못했습니다.'
+    isLoading.value = false
+    return
+  }
+
+  try {
+    airQuality.value = await fetchAirQuality(detail.value.lat, detail.value.lon)
+  } catch {
+    airQuality.value = null
   } finally {
     isLoading.value = false
   }
@@ -92,6 +102,15 @@ function goBackToDashboard() {
           <div class="stat-label">일출 · 일몰</div>
           <div class="stat-value" style="font-size: 1.3rem">
             {{ detail.sunrise }} · {{ detail.sunset }}
+          </div>
+        </div>
+        <div v-if="airQuality" class="stat-tile">
+          <div class="stat-label">대기질 (기타 외부 API)</div>
+          <div class="stat-value" style="font-size: 1.3rem">
+            {{ classifyAirQuality(airQuality.usAqi) }}
+          </div>
+          <div style="color: var(--toss-text-secondary); font-size: 0.85rem; margin-top: 4px">
+            PM10 {{ airQuality.pm10 }} · PM2.5 {{ airQuality.pm25 }}
           </div>
         </div>
       </div>

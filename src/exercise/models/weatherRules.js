@@ -20,3 +20,11 @@ export function convertTemp(tempCelsius, unit) {
   }
   return tempCelsius
 }
+
+export function classifyAirQuality(usAqi) {
+  if (usAqi == null) return '정보 없음'
+  if (usAqi <= 50) return '좋음'
+  if (usAqi <= 100) return '보통'
+  if (usAqi <= 150) return '민감군 주의'
+  return '나쁨'
+}

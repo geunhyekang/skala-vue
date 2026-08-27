@@ -1,20 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { fetchUsdToKrwRate } from '../services/exchangeRateApi'
-import Card from 'primevue/card'
-import Button from 'primevue/button'
 
 const router = useRouter()
-const usdToKrw = ref(null)
-
-onMounted(async () => {
-  try {
-    usdToKrw.value = await fetchUsdToKrwRate()
-  } catch (err) {
-    usdToKrw.value = null
-  }
-})
 
 function goToDashboard() {
   router.push('/')
@@ -37,7 +24,8 @@ function goToDashboard() {
       <div class="step-label">STEP 2</div>
       <div class="step-title">도시 이름으로 바로 검색하세요</div>
       <div class="step-desc">
-        한글로 도시 이름을 입력하면 실시간으로 필터링된 결과를 보여드려요.
+        한글로 도시 이름을 입력하면 실시간으로 필터링된 결과를 보여드려요. 목록에 없는 새로운
+        지역을 추가하고 싶다면, 영문 도시명으로 검색해주세요 (예: Tokyo, Paris).
       </div>
     </div>
 
@@ -51,13 +39,10 @@ function goToDashboard() {
       <div class="step-label">STEP 4</div>
       <div class="step-title">카드를 눌러 상세 정보와 예보까지</div>
       <div class="step-desc">
-        지역 카드를 클릭하면 상세 관측 정보와 3시간 단위 예보까지 확인할 수 있어요.
+        지역 카드를 클릭하면 상세 관측 정보와 3시간 단위 예보, 그리고 미세먼지 정보(Open-Meteo
+        Air Quality API)까지 한 번에 확인할 수 있어요.
       </div>
     </div>
-
-    <p v-if="usdToKrw" style="color: #8b95a1; font-size: 0.85rem; margin-top: 16px">
-      💱 오늘의 환율(기타 외부 API): 1 USD ≈ {{ Math.round(usdToKrw) }} KRW
-    </p>
 
     <button class="pill-button-primary" @click="goToDashboard">메인 대시보드로 이동</button>
   </div>

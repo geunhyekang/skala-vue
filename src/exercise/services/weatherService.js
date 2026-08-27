@@ -51,6 +51,8 @@ export async function fetchWeatherDetail(city) {
     windSpeed: data.wind.speed,
     sunrise: formatTime(data.sys.sunrise),
     sunset: formatTime(data.sys.sunset),
+    lat: data.coord.lat,
+    lon: data.coord.lon,
   }
 }
 

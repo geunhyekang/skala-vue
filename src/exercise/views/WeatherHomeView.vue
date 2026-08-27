@@ -26,7 +26,7 @@ const addError = ref(null)
 onMounted(async () => {
   try {
     weatherList.value = await fetchWeatherList(cityStore.cities)
-  } catch (err) {
+  } catch {
     loadError.value = '날씨 데이터를 불러오지 못했습니다.'
   } finally {
     isLoading.value = false
@@ -79,7 +79,7 @@ async function handleAddCity() {
       humidity: result.humidity,
     })
     searchQuery.value = ''
-  } catch (err) {
+  } catch {
     addError.value = `'${query}' 지역을 찾을 수 없어요. 영문 도시명으로 검색해보세요. (예: Tokyo)`
   } finally {
     isAdding.value = false
@@ -135,6 +135,9 @@ async function handleAddCity() {
           class="add-city-prompt grid-full"
         >
           <p>'{{ searchQuery }}' 지역이 목록에 없어요.</p>
+          <p style="color: var(--toss-text-secondary); font-size: 0.82rem; margin-top: 4px">
+            새 지역은 영문 도시명으로 검색해야 정확히 추가돼요. (예: Tokyo, Paris)
+          </p>
           <button
             class="pill-button-primary"
             style="width: auto; padding: 10px 20px; margin-top: 8px"
