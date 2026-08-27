@@ -62,15 +62,17 @@ function handleClickDetail({ id }) {
 </script>
 
 <template>
-  <div class="weather-home">
+  <div>
     <StatusBanner
       :message="selectedCityInfo"
       :click-count="clickCount"
       :average-temp="averageTemp"
     />
 
-    <p v-if="isLoading">날씨 데이터를 불러오는 중...</p>
-    <p v-else-if="loadError" class="error">{{ loadError }}</p>
+    <div v-if="isLoading" class="d-flex justify-center my-6">
+      <v-progress-circular indeterminate color="primary" />
+    </div>
+    <v-alert v-else-if="loadError" type="error" class="mb-4">{{ loadError }}</v-alert>
 
     <template v-else>
       <BaseDashboardCard title="🔍 도시 검색 (한글 즉시 동기화)">
@@ -85,9 +87,9 @@ function handleClickDetail({ id }) {
           @select-card="handleSelectCard"
           @click-detail="handleClickDetail"
         />
-        <p v-if="filteredWeatherList.length === 0" class="empty">
+        <v-alert v-if="filteredWeatherList.length === 0" type="info" variant="tonal">
           검색 결과와 일치하는 도시가 없습니다.
-        </p>
+        </v-alert>
       </BaseDashboardCard>
     </template>
   </div>

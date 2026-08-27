@@ -5,24 +5,10 @@ defineProps({
 </script>
 
 <template>
-  <section class="dashboard-card">
-    <h3 class="dashboard-card__title">{{ title }}</h3>
-    <div class="dashboard-card__body">
+  <v-card class="mb-4" variant="outlined">
+    <v-card-title>{{ title }}</v-card-title>
+    <v-card-text>
       <slot />
-    </div>
-  </section>
+    </v-card-text>
+  </v-card>
 </template>
-
-<style scoped>
-.dashboard-card {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin-bottom: 14px;
-  background: #fff;
-}
-.dashboard-card__title {
-  margin: 0 0 10px;
-  font-size: 1em;
-}
-</style>

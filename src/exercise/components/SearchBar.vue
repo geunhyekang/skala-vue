@@ -5,34 +5,22 @@ defineProps({
 
 const emit = defineEmits(['update-query'])
 
-function handleInput(event) {
-  emit('update-query', event.target.value)
+function handleInput(value) {
+  emit('update-query', value)
 }
 </script>
 
 <template>
-  <div class="search-bar">
-    <input
-      type="text"
-      placeholder="검색할 도시 이름 입력"
-      :value="searchQuery"
-      @input="handleInput"
+  <div>
+    <v-text-field
+      label="검색할 도시 이름 입력"
+      prepend-inner-icon="mdi-magnify"
+      :model-value="searchQuery"
+      density="comfortable"
+      variant="outlined"
+      clearable
+      @update:model-value="handleInput"
     />
-    <p>검색 중인 도시: {{ searchQuery || '없음' }}</p>
+    <p class="text-body-2 text-medium-emphasis">검색 중인 도시: {{ searchQuery || '없음' }}</p>
   </div>
 </template>
-
-<style scoped>
-.search-bar input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 6px 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-.search-bar p {
-  margin: 6px 0 0;
-  font-size: 0.85em;
-  color: #555;
-}
-</style>

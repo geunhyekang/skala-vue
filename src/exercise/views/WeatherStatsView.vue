@@ -21,16 +21,18 @@ const averageTemp = computed(() => {
 </script>
 
 <template>
-  <div class="stats-view">
-    <h3>📊 전체 도시 날씨 통계</h3>
-    <p v-if="isLoading">불러오는 중...</p>
-    <ul v-else>
-      <li>등록된 도시 수: {{ weatherList.length }}개</li>
-      <li>평균 기온: {{ averageTemp }}°C</li>
-      <li>🔥 더움(25도 이상): {{ hotCount }}개</li>
-      <li>❄ 선선함(25도 미만): {{ coolCount }}개</li>
-    </ul>
-  </div>
+  <v-card variant="outlined">
+    <v-card-title>📊 전체 도시 날씨 통계</v-card-title>
+    <div v-if="isLoading" class="d-flex justify-center my-6">
+      <v-progress-circular indeterminate color="primary" />
+    </div>
+    <v-list v-else>
+      <v-list-item>등록된 도시 수: {{ weatherList.length }}개</v-list-item>
+      <v-list-item>평균 기온: {{ averageTemp }}°C</v-list-item>
+      <v-list-item>🔥 더움(25도 이상): {{ hotCount }}개</v-list-item>
+      <v-list-item>❄ 선선함(25도 미만): {{ coolCount }}개</v-list-item>
+    </v-list>
+  </v-card>
 </template>
 
 <style scoped>

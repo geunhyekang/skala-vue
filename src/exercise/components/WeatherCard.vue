@@ -12,11 +12,11 @@ const emit = defineEmits(['select-card', 'click-detail'])
 const configStore = useConfigStore()
 
 const displayTemp = computed(() => {
-  const rawTemp = props.city.temp // 원본 데이터는 섭씨 숫자
+  const rawTemp = props.city.temp
   if (configStore.unit === 'fahrenheit') {
-    return Math.round((rawTemp * 9) / 5 + 32) // 화씨 변환 연산
+    return Math.round((rawTemp * 9) / 5 + 32)
   }
-  return rawTemp // 'celsius'일 때는 원본 그대로 반환
+  return rawTemp
 })
 
 function handleSelect() {
@@ -33,71 +33,28 @@ function handleToggleFavorite() {
 </script>
 
 <template>
-  <div class="weather-card" @click="handleSelect">
-    <div class="card-header">
-      <strong>{{ city.name }}</strong>
-      <span>현재 기온: {{ displayTemp }}{{ configStore.unitSymbol }}</span>
-    </div>
+  <v-card class="mb-3" variant="tonal" @click="handleSelect">
+    <v-card-title class="d-flex justify-space-between">
+      <span>{{ city.name }}</span>
+      <span>{{ displayTemp }}{{ configStore.unitSymbol }}</span>
+    </v-card-title>
 
-    <!-- isHot/isHumid 판정은 원본(섭씨) 기준 그대로 유지, 화면 표시만 단위 전환 -->
-    <span v-if="isHot(city)" class="badge hot">🔥 더움 (25도 이상)</span>
-    <span v-else class="badge cool">❄ 선선함 (25도 미만)</span>
+    <v-card-text>
+      <v-chip v-if="isHot(city)" color="red" size="small" class="mr-2">🔥 더움 (25도 이상)</v-chip>
+      <v-chip v-else color="blue" size="small" class="mr-2">❄ 선선함 (25도 미만)</v-chip>
 
-    <span v-if="isHumid(city)" class="badge humid"> 💧 습도 높음 ({{ city.humidity }}%) </span>
+      <v-chip v-if="isHumid(city)" color="cyan" size="small">
+        💧 습도 높음 ({{ city.humidity }}%)
+      </v-chip>
+    </v-card-text>
 
-    <button class="favorite-button" @click.stop="handleToggleFavorite">
-      {{ configStore.isFavorite(city.id) ? '★ 즐겨찾기' : '☆ 즐겨찾기' }}
-    </button>
-
-    <button @click.stop="handleDetail">상세보기</button>
-  </div>
+    <v-card-actions>
+      <v-btn variant="tonal" color="amber" size="small" @click.stop="handleToggleFavorite">
+        {{ configStore.isFavorite(city.id) ? '★ 즐겨찾기' : '☆ 즐겨찾기' }}
+      </v-btn>
+      <v-btn variant="elevated" color="primary" size="small" @click.stop="handleDetail">
+        상세보기
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
-
-<style scoped>
-.weather-card {
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 10px 12px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-.badge {
-  display: inline-block;
-  margin-right: 6px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.85em;
-}
-.badge.hot {
-  background: #ffe1e1;
-  color: #c0392b;
-}
-.badge.cool {
-  background: #e1f0ff;
-  color: #2471a3;
-}
-.badge.humid {
-  background: #e6f7ff;
-  color: #1a7fa8;
-}
-.favorite-button {
-  display: inline-block;
-  margin-top: 8px;
-  margin-right: 6px;
-  padding: 4px 10px;
-  border: 1px solid #f0c419;
-  border-radius: 6px;
-  background: #fffbe6;
-  color: #a67c00;
-  cursor: pointer;
-}
-button {
-  display: inline-block;
-  margin-top: 8px;
-}
-</style>

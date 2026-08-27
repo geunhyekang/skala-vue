@@ -7,27 +7,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="status-banner">
-    <p class="message">{{ message }}</p>
-    <p class="stat-line">클릭 횟수: {{ clickCount }}회 · 평균 기온: {{ averageTemp }}°C</p>
-  </div>
+  <v-alert type="success" variant="tonal" class="mb-4">
+    <div>{{ message }}</div>
+    <div class="text-caption">클릭 횟수: {{ clickCount }}회 · 평균 기온: {{ averageTemp }}°C</div>
+  </v-alert>
 </template>
-
-<style scoped>
-.status-banner {
-  text-align: center;
-  margin-bottom: 14px;
-}
-.message {
-  background: #eef7ee;
-  color: #2f7a2f;
-  padding: 8px;
-  border-radius: 6px;
-  margin: 0 0 4px;
-}
-.stat-line {
-  color: #555;
-  font-size: 0.9em;
-  margin: 0;
-}
-</style>

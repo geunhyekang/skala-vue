@@ -9,11 +9,13 @@ function goHome() {
 </script>
 
 <template>
-  <div class="not-found">
-    <p class="icon">🌞❓</p>
-    <h3>페이지를 찾을 수 없습니다.</h3>
-    <p class="desc">요청하신 주소가 존재하지 않거나, 아직 개발되지 않았습니다.</p>
-    <button @click="goHome">날씨 메인으로 이동</button>
+  <div class="text-center py-8">
+    <div class="text-h3 mb-2">🌞❓</div>
+    <h3 class="text-h6">페이지를 찾을 수 없습니다.</h3>
+    <p class="text-medium-emphasis mb-4">
+      요청하신 주소가 존재하지 않거나, 아직 개발되지 않았습니다.
+    </p>
+    <v-btn color="primary" @click="goHome">날씨 메인으로 이동</v-btn>
   </div>
 </template>
 
